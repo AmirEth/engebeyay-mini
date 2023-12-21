@@ -10,7 +10,7 @@ class Account(AbstractUser):
     is_seller = models.BooleanField('is seller', default=False)
     is_buyer = models.BooleanField('is buyer', default=False)
     last_login = models.DateTimeField(auto_now_add=True)
-    is_active = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
     is_delivery_guy = models.BooleanField(default=False)
     is_delivery_company = models.BooleanField(default=False)
 
