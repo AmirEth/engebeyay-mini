@@ -1,0 +1,189 @@
+{% extends '../seller_base.html' %}
+{% load static %}
+{% block content %}
+
+<!-- partial:partials/_sidebar.html -->
+
+<!-- partial:partials/_sidebar.html -->
+{% include 'includes/seller_sideNav.html' %}
+<!-- partial -->
+<div class="main-panel">
+    <div class="content-wrapper">
+        <div class="col-12">
+            <div class="card">
+                {% include 'includes/admin_alert.html' %}
+                <div class="card-body">
+
+                    <h4 class="card-title">Your Profile</h4><br>
+                    <form method="post" class="form-sample">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p class="card-description">Buisness: {{seller.buisness_name}} </p>
+                                <p class="card-description">Date Joined: {{seller.user.date_joined}}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <p class="card-description">Email: {{seller.user.email}} </p>
+                            </div>
+                        </div> <br>
+                        <h6 class="card">Update Your Profile Profile</h6><br>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">Buisness Name</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" name="buisness_name" value="{{seller.buisness_name}} "
+                                            class="form-control" required />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">Phone No.</label>
+                                    <div class="col-sm-9">
+                                        <input type="number" name="phone_number" value="{{seller.phone_number}}"
+                                            class="form-control" required />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                        </div>
+                        <p class="card-description"> Payment </p>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">Update Merchant ID</label>
+                                    <div class="col-sm-9">
+                                        <input class="form-control" type="text" name="merchant_id"
+                                            value="{{seller.merchant_id}}" required>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">Location</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" id="seller-location" placeholder="Type address..."
+                                            class="form-control" />
+                                        <input type="hidden" id="id_latitude" name="latitude"
+                                            value="{{seller.latitude}}">
+                                        <input type="hidden" id="id_longitude" name="longitude"
+                                            value="{{seller.longitude}}">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+
+                        </div>
+                        <button type="submit" class="btn btn-success btn-sm me-2">Save</button>
+                        <button class="btn btn-light btn-sm">Cancel</button>
+                    </form>
+                    <hr><br>
+                    <h6 class="card">Change Your Password</h6><br>
+                    <div class="row">
+                        <form class="form-sample" action="{% url 'seller_change_password' %}" method="post">
+                            {% csrf_token %}
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="col-sm-5 col-form-label">New Password</label>
+                                    <div class="col-sm-7">
+                                        <input type="password" name="password" id="id_password" class="form-control"
+                                            onkeyup="checkPasswords()" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="col-sm-5 col-form-label">Confirm Password.</label>
+                                    <div class="col-sm-7">
+                                        <input type="password" name="confirm_password" id="id_confirm_password"
+                                            class="form-control" onkeyup="checkPasswords()" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="form-group row">
+                                    <div class="col-sm-9 offset-sm-3">
+                                        <small id="password-feedback"></small>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-success btn-sm me-2">Change</button>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- content-wrapper ends -->
+</div>
+<!-- main-panel ends -->
+<!-- page-body-wrapper ends -->
+
+<script
+    src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&key=AIzaSyBh40OvYV5OYX3OLPJb3meMuCecYKiAIvY">
+    </script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script>
+    var searchInput = 'seller-location';
+
+    $(document).ready(function () {
+        var autocomplete;
+        autocomplete = new google.maps.places.Autocomplete((document.getElementById(searchInput)), {
+            componentRestrictions: {
+                country: "ET"
+            }
+        });
+
+        google.maps.event.addListener(autocomplete, 'place_changed', function (event) {
+            var place = autocomplete.getPlace();
+            var location = place.name;
+            var latitude = place.geometry.location.lat();
+            var longitude = place.geometry.location.lng();
+
+            // Set the value of the hidden input fields to the selected place name, latitude, and longitude
+            document.getElementById("seller-location").value = location;
+            document.getElementById("id_latitude").value = latitude;
+            document.getElementById("id_longitude").value = longitude;
+        });
+    });
+
+    // Form submission
+    $('#seller-register-form').submit(function (event) {
+        // Get the selected place name, latitude, and longitude from the hidden input fields
+        var location = document.getElementById("seller-location").value;
+        var latitude = document.getElementById("id_latitude").value;
+        var longitude = document.getElementById("id_longitude").value;
+
+        // Set the values of the latitude and longitude fields in the form to the selected values
+        document.getElementById("id_latitude").value = latitude;
+        document.getElementById("id_longitude").value = longitude;
+    });
+</script>
+
+<!--To check if the passwords match-->
+<script>
+    function checkPasswords() {
+        var password = document.getElementById('id_password').value;
+        var confirmPassword = document.getElementById('id_confirm_password').value;
+        var feedback = document.getElementById('password-feedback');
+
+        if (password === confirmPassword) {
+            feedback.innerHTML = 'Passwords match.';
+            feedback.classList.remove('text-danger');
+            feedback.classList.add('text-success');
+        } else {
+            feedback.innerHTML = 'Passwords do not match.';
+            feedback.classList.remove('text-success');
+            feedback.classList.add('text-danger');
+        }
+    }
+</script>
+{% endblock %}

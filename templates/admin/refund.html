@@ -1,0 +1,58 @@
+{% extends '../admin_base.html' %}
+{% load static %}
+{% block content %}
+
+<!-- partial:partials/_sidebar.html -->
+
+<!-- partial:partials/_sidebar.html -->
+{% include 'includes/admin_sideNav.html' %}
+<!-- partial -->
+<div class="main-panel">
+    <div class="content-wrapper">
+        <div class="col-12 grid-margin stretch-card">
+            <div class="col-lg-12 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Refunds</h4>
+                        <div class="search-field d-none d-md-block ">
+
+
+                        </div>
+                        <div class="container">
+                            <table class="table table-striped" id="myTablerefund">
+                                <thead>
+                                    <tr>
+                                        <th><b> Buyer Name</b></th>
+                                        <th><b> Buyer email</b></th>
+                                        <th> <b> Total Order </b></th>
+                                        <th> <b>Currency </b></th>
+                                        <th> <b>Action </b></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for refund in refunds %}
+                                    <tr>
+                                        <td> {{refund.user.buyer.first_name}} {{refund.user.buyer.last_name}}</td>
+                                        <td> {{refund.user}} </td>
+                                        <td> {{refund.total_payment}} </td>
+                                        <td> ETB</td>
+                                        <td> <a class="btn btn-sm btn-warning" href="{% url 'remove_refund' refund  %}"
+                                                onclick="return confirm('Payment of The Refund Will be Confirmed!')">
+                                                Confirmed! </a>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- content-wrapper ends -->
+</div>
+<!-- main-panel ends -->
+<!-- page-body-wrapper ends -->
+
+
+{% endblock %}

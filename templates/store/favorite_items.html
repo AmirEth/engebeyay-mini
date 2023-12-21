@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    {% if not fov_items%}
+    <div class="mt-2 mb-5">
+        <h6 class="text-center">You Dont have any Favorite Items</h6>
+        <br>
+        <div class="text-center">
+            <a href="{% url 'store' %}" class="btn btn-warning">Go to Store</a>
+        </div>
+    </div>
+    {% else%}
+    <h2 class="mb-4">Your Favorite Items</h2>
+    {% for fov_item in fov_items %}
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="img-wrap"> <a href="{{ fov_item.product.get_url }}"><img
+                            src="{{ fov_item.product.images.url }}"></a></div>
+                <div class="card-body">
+                    <h5 class="card-title">{{fov_item.product.product_name}}</h5>
+                    <p class="card-text">{{fov_item.product.description}}</p>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <a href="{{ fov_item.product.get_url }}" class="btn btn-warning shadow-0 me-1">View
+                                Details</a>
+                        </div>
+                        <div class="col-md-6">
+                            <form action="{% url 'remove_favorite' %}" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="product" value="{{fov_item.product.product_id}}">
+                                <button type="submit" class="btn btn-danger">Remove</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Add more cards for other favorite items here -->
+    </div>
+    {% endfor %}
+    {%endif%}
+</div>
+{% endblock %}

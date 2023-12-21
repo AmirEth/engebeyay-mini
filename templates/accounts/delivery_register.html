@@ -1,0 +1,145 @@
+{% extends 'registration_base.html' %}
+
+
+{% block content %}
+
+
+<div class="container" style="margin-top: 50px;">
+    <center><a style="width: 300px;" class="navbar-brand brand-logo" href="{% url 'home' %}"><img style="width: 250px;"
+                src="../../static/admin/assets/images/logo.svg" alt="logo" /></a>
+        </a></center>
+</div>
+<section class="section-content padding-y">
+
+    <!-- ============================ COMPONENT REGISTER   ================================= -->
+    <div class="card mx-auto" style="max-width:520px; ">
+        <article class="card-body">
+            {% include 'includes/alerts.html' %}
+            <header class="mb-4">
+                <h4 class="card-title">Sign up as a Delivery Company</h4>
+            </header>
+            <form id="delivery-register-form" action="{% url 'delivery_register' %}" method="POST"
+                enctype="multipart/form-data">
+                {% csrf_token %}
+                {% if form.errors %}
+                <div class="alert alert-danger">
+                    {% for field in form %}
+                    {% for error in field.errors %}
+                    <strong>{{ field.label }}:</strong> {{ error }}
+                    {% endfor %}
+                    {% endfor %}
+                </div>
+                {% endif %}
+                <div class="form-row">
+                    <div class="col form-group">
+                        <label for="{{ form.company_name.id_for_label }}">Company name</label>
+                        {{ form.company_name }}
+                    </div> <!-- form-group end.// -->
+                </div> <!-- form-row end.// -->
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="{{ form.email.id_for_label }}">Email Address</label>
+                        {{ form.email }}
+                    </div> <!-- form-group end.// -->
+                    <div class="form-group col-md-6">
+                        <label for="{{ form.phone_number.id_for_label }}">Phone Number</label>
+                        {{ form.phone_number }}
+                    </div> <!-- form-group end.// -->
+                </div> <!-- form-row.// -->
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="{{ form.merchant_id.id_for_label }}">delivery_fee </label>
+                        {{ form.delivery_fee }}
+                    </div> <!-- form-group end.// -->
+                    <div class="form-group col-md-6">
+                        <label for="{{ form.merchant_id.id_for_label }}">City/ Region </label>
+                        <input type="text" required class="form-control" id="delivery-location"
+                            placeholder="Type address..." />
+                    </div> <!-- form-group end.// -->
+
+                    <div class="form-row">
+                        <div class="form-row">
+                            <div class="form-group col-md-6 d-none">
+                                <label for="id_location">Location</label>
+                                {{ form.location }}
+                            </div>
+                        </div>
+                    </div> <!-- form-row.// -->
+
+                    <div class="form-row">
+                        <div class="form-group col-md-6 ">
+                            <label for="{{ form.password1.id_for_label }}">Create password</label>
+                            {{ form.password1 }}
+                        </div> <!-- form-group end.// -->
+                        <div class="form-group col-md-6 ">
+                            <label for="{{ form.password2.id_for_label }}">Repeat password</label>
+                            {{ form.password2 }}
+                        </div> <!-- form-group end.// -->
+                    </div> <!-- form-row end.// -->
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="{{ form.verification_image.id_for_label }}">Verification Image</label>
+                            {{ form.verification_image }}
+                        </div>
+                        <div class="form-group ">
+
+                            <button type="submit" class="btn btn-primary btn-block"> Register </button>
+                        </div> <!-- form-group// -->
+                    </div>
+
+
+                    {{ form.email.errors }}
+                    {{ form.non_field_errors }}
+            </form>
+        </article><!-- card-body.// -->
+    </div> <!-- card .// -->
+    <p class="text-center mt-4">Have an account? <a href="{% url 'login' %}">Log In</a></p>
+    <br><br>
+    <!-- ============================ COMPONENT REGISTER  END.// ================================= -->
+
+
+</section>
+
+<script
+    src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&key=AIzaSyBh40OvYV5OYX3OLPJb3meMuCecYKiAIvY">
+    </script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script>
+    var searchInput = 'delivery-location';
+
+    $(document).ready(function () {
+        var autocomplete;
+        autocomplete = new google.maps.places.Autocomplete((document.getElementById(searchInput)), {
+            types: ['geocode'],
+            componentRestrictions: {
+                country: "ET"
+            }
+        });
+
+        google.maps.event.addListener(autocomplete, 'place_changed', function (event) {
+            var place = autocomplete.getPlace();
+            var location = place.name;
+
+
+            // Set the value of the hidden input fields to the selected place name, latitude, and longitude
+            document.getElementById("delivery-location").value = location;
+            document.getElementById("id_location").value = location;
+
+        });
+    });
+
+    // Form submission
+    $('#delivery-register-form').submit(function (event) {
+        // Get the selected place name, latitude, and longitude from the hidden input fields
+        var location = document.getElementById("delivery-location").value;
+        var latitude = document.getElementById("id_location").value;
+
+
+        // Set the values of the latitude and longitude fields in the form to the selected values
+        document.getElementById("id_location").value = location;
+
+    });
+</script>
+
+{% endblock %}

@@ -1,0 +1,64 @@
+</html>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+    .bottom-tabs {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 60px;
+        display: flex;
+        background-color: white;
+        box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
+        text-align: center;
+    }
+
+    .bottom-tabs a {
+        flex: 1;
+        padding: 5px;
+        color: #bfbfbf;
+        text-decoration: none;
+    }
+
+    .bottom-tabs a span {
+        font-size: 13px;
+        font-weight: bold;
+        display: block;
+    }
+
+    .bottom-tabs i {
+        font-size: 20px;
+    }
+
+    .bottom-tabs a.active {
+        color: #ffc106;
+    }
+</style>
+
+<div class="bottom-tabs d-flex">
+    <a href="{% url 'assiged_delivery' %}" class="active ">
+        <i class="fa fa-truck"></i>
+        <span>Assigned Deliveries</span>
+    </a>
+    <a href="{% url 'current_delivery' %}" class="inactive ">
+        <i class="fa fa-briefcase"></i>
+        <span>Current Delivey</span>
+    </a>
+    <a href="{% url 'delivery_profile' %}" class="inactive ">
+        <i class="fa fa-user"></i>
+        <span>My Profile</span>
+    </a>
+</div>
+<script>
+    var navLinks = document.querySelectorAll('.bottom-tabs a');
+    var currentUrl = window.location.pathname;
+
+    navLinks.forEach(function (navLink) {
+        var href = navLink.getAttribute('href');
+        if (currentUrl == href) {
+            navLink.classList.add('active');
+        } else {
+            navLink.classList.remove('active');
+        }
+    });
+</script>

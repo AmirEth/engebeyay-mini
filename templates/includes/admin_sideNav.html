@@ -1,0 +1,161 @@
+{% load static %}
+
+<!-- partial:partials/_sidebar.html -->
+<nav class="sidebar sidebar-offcanvas" id="sidebar">
+    <ul class="nav">
+        <li class="nav-item nav-profile">
+            <a href="#" class="nav-link">
+
+                {% if user.is_superadmin %}
+                <div class="nav-profile-image">
+                    <img src="../../static/admin/assets/images/faces/face1.jpg" alt="profile">
+                    <span class="login-status online"></span>
+                    <!--change to offline or busy as needed-->
+                </div>
+                <div class="nav-profile-text d-flex flex-column">
+                    <span class="font-weight-bold mb-2">{{user.staff.first_name}} {{user.staff.last_name}} </span>
+
+                    <span class="text-secondary text-small">Platform Manager</span>
+                </div>
+                <i class="mdi mdi-bookmark-check text-success nav-profile-badge"></i>
+                {% else %}
+                <div class="nav-profile-text d-flex flex-column">
+                    <h5 class="font-weight-bold">Hi, {{user.staff.first_name}} {{user.staff.last_name}} </h5>
+
+                    <span class="text-secondary text-small">Staff Member</span>
+                </div>
+                {% endif %}
+            </a>
+        </li>
+        <li class="nav-item active">
+            <a class="nav-link " href="{% url 'admin' %}">
+                <span class="menu-title">Dashboard</span>
+                <i class="mdi mdi-home menu-icon"></i>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'admin_profile' %}">
+                <span class="menu-title">Profile</span>
+                <i class="mdi mdi-contacts menu-icon"></i>
+            </a>
+        </li>
+        {% if user.is_superadmin == False %} <!--Product is only seen by Staff-->
+        <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="collapse" href="#ui-basic" aria-expanded="false"
+                aria-controls="ui-basic">
+                <span class="menu-title">Products</span>
+                <i class="menu-arrow"></i>
+                <i class="mdi mdi-crosshairs-gps menu-icon"></i>
+            </a>
+            <div class="collapse" id="ui-basic">
+                <ul class="nav flex-column sub-menu">
+                    <li class="nav-item"> <a class="nav-link" href="{% url 'admin_product_items'%}">All Items</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="{% url 'admin_product_category'%}">Add Category</a>
+                    </li>
+                </ul>
+            </div>
+        </li>
+        {% endif %}
+        {% if user.is_superadmin %}
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'admin_companyDetails'%}">
+                <span class="menu-title">Company Details</span>
+                <i class="mdi mdi-store menu-icon"></i>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="collapse" href="#general-pages" aria-expanded="false"
+                aria-controls="general-pages">
+                <span class="menu-title">Users</span>
+                <i class="menu-arrow"></i>
+                <i class="mdi mdi-table-large menu-icon"></i>
+            </a>
+            <div class="collapse" id="general-pages">
+                <ul class="nav flex-column sub-menu">
+                    <li class="nav-item"> <a class="nav-link" href="{% url 'admin_user_staff' %}">Staff </a></li>
+                    <li class="nav-item"> <a class="nav-link" href="{% url 'admin_user_buyer' %}"> Buyers </a></li>
+                    <li class="nav-item"> <a class="nav-link" href="{% url 'admin_user_seller' %}"> Sellers </a></li>
+                    <li class="nav-item"> <a class="nav-link" href="{% url 'admin_user_delivery' %}"> Delivery Providers
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+        </li>
+        {% endif %}
+        {% if user.is_superadmin == False %} <!--Transaction is only seen by Staff-->
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'admin_transaction'%}">
+                <span class="menu-title">Transactions</span>
+                <i class="mdi mdi-file-document menu-icon"></i>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'admin_refund'%}">
+                <span class="menu-title">Refunds</span>
+                <i class="mdi mdi-cash menu-icon"></i>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'un_verified_users'%}">
+                <span class="menu-title">Unverified Users</span>
+                <i class="mdi mdi-table-large menu-icon"></i>
+            </a>
+        </li>
+        {% endif %}
+        {% if user.is_superadmin %} <!--Report and Broadcast are only seen by SuperAdmin-->
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'admin_companypayments'%}">
+                <span class="menu-title">Payments</span>
+                <i class="mdi mdi-cash menu-icon"></i>
+            </a>
+        </li>
+
+        <li class="nav-item sidebar-actions">
+            <button class="btn btn-block btn-lg btn-gradient-warning mt-4">+Broadcast</button>
+        </li>
+        {% endif %}
+        <li class="nav-item sidebar-actions">
+            {% if user.is_superadmin == False %} <!--Customer Service is only seen by Staff-->
+            <div class="mt-4">
+                <div class="border-bottom">
+                    <p class="text-secondary">Customer Service</p>
+                </div>
+                <ul class="gradient-bullet-list mt-4">
+                    <a href="{% url 'feedbacks'%}" style="text-decoration: none;" class="text-secondary">
+                        <li>Feedback</li>
+                    </a>
+
+                </ul>
+            </div>
+            </span>
+        </li>
+        {% endif %}
+    </ul>
+</nav>
+<script>
+    var navItems = document.querySelectorAll('.nav-item');
+    var currentUrl = window.location.pathname;
+    var navLinks = document.querySelectorAll('.nav-item a');
+
+    navLinks.forEach(function (navLink) {
+        var href = navLink.getAttribute('href');
+        if (currentUrl == href) {
+            navLink.parentElement.classList.add('active');
+        } else {
+            navLink.parentElement.classList.remove('active');
+        }
+
+        // Check if the current URL is a child of the parent `li` element
+        var childLinks = navLink.parentElement.querySelectorAll('ul.nav a');
+        childLinks.forEach(function (childLink) {
+            var childHref = childLink.getAttribute('href');
+            if (currentUrl == childHref) {
+                navLink.parentElement.classList.add('active');
+            } else {
+                childLink.parentElement.classList.remove('active');
+            }
+        });
+    });
+
+</script>

@@ -1,0 +1,104 @@
+{% extends '../seller_base.html' %}
+{% load static %}
+{% block content %}
+
+<!-- partial:partials/_sidebar.html -->
+
+<!-- partial:partials/_sidebar.html -->
+{% include 'includes/seller_sideNav.html' %}
+<!-- partial -->
+<div class="main-panel">
+    <div class="content-wrapper">
+        <div class="col-12">
+            <div class="card">
+                {% include 'includes/admin_alert.html' %}
+                <div class="card-body">
+                    <h4 class="card-title">Add Items To Your Inventory</h4>
+                    <form class="form-sample" method="POST" enctype="multipart/form-data" action="{% url 'add_item' %}">
+                        {% csrf_token%}
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">Product Name</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" name="product_name" />
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">Discription.</label>
+                                    <div class="col-sm-9">
+                                        <textarea name="description"
+                                            style="border-color: rgba(193, 209, 209, 0.452); padding: 10px;" rows="6"
+                                            cols="35" name="description"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">Image</label>
+                                    <div class="col-sm-9">
+                                        <input class="form-control" type="file" name="image">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">Category</label>
+                                    <div class="col-sm-9">
+                                        <select class="form-control" name="category">
+                                            {% for category in categories %}
+                                            <option value="{{category.category_name}}">{{category.category_name}}
+                                            </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="card-description" name="Value"> Values </p>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">Price</label>
+                                    <div class="col-sm-9">
+                                        <input type="number" class="form-control" name="price" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">Stock</label>
+                                    <div class="col-sm-9">
+                                        <input type="number" name="stock" class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-success btn-sm me-2">Add</button>
+                        <button class="btn btn-light btn-sm">Cancel</button>
+
+
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- content-wrapper ends -->
+</div>
+<!-- main-panel ends -->
+<!-- page-body-wrapper ends -->
+
+</body>
+
+
+</html>
+{% endblock %}

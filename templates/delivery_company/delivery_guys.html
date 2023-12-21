@@ -1,0 +1,96 @@
+{% extends '../delivery_base.html' %}
+{% load static %}
+{% block content %}
+
+<!-- partial:partials/_sidebar.html -->
+{% include 'delivery_company/includes/side_nav.html' %}
+<!-- partial -->
+<div class="main-panel">
+    <div class="content-wrapper">
+        <div class="col-12 grid-margin stretch-card">
+            <div class="col-lg-12 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Delivery Providers of "Company Name"</h4>
+                        <div class="search-field d-none d-md-block ">
+                            <form class="d-flex align-items-center h-100" action="#">
+                                <div class="" style="display: flex; align-items: center; justify-content: flex-end;">
+                                    <i class=" mdi mdi-magnify"></i>
+                                    <input id="myInputstaff" onkeyup="myFunction()" type="text"
+                                        class="form-control bg-transparent border-0"
+                                        placeholder="Search for Staff Members">
+                                </div>
+                            </form>
+                        </div>
+                        <div class="container">
+                            <table class="table table-striped" id="myTablestaff">
+                                <thead>
+                                    <tr>
+                                        <th> <b> Name </b></th>
+                                        <th> <b>Phone Number </b></th>
+                                        <th><b> Email </b></th>
+                                        <th><b> Status </b></th>
+                                        <th> <b>Action </b></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for delivery_provider in delivery_providers %}
+                                    <tr>
+                                        <td> {{delivery_provider.first_name}} {{delivery_provider.last_name}} </td>
+                                        <td> {{delivery_provider.phone_number}} </td>
+                                        <td> {{delivery_provider}} </td>
+                                        <td> {{delivery_provider.status}} </td>
+
+                                        {% if delivery_provider.user.is_active == True %}
+                                        <td> <a class="btn btn-sm btn-danger"
+                                                href="{% url 'update_delivery_guy' delivery_provider.user.email %}"
+                                                onclick="return confirm('Are you sure you want to Block {{delivery_provider.first_name}}?')">
+                                                Block </a>
+                                        </td>
+                                        {% else %}
+                                        <td> <a class="btn btn-sm btn-success "
+                                                href="{% url 'update_delivery_guy' delivery_provider.user.email %}">
+                                                Activate Account</a>
+                                        </td>
+                                        {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- content-wrapper ends -->
+</div>
+<!-- main-panel ends -->
+<!-- page-body-wrapper ends -->
+<!--Table Search-->
+<script>
+    function myFunction() {
+        // Declare variables
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("myInputstaff");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTablestaff");
+        tr = table.getElementsByTagName("tr");
+
+        // Loop through all table rows, and hide those who don't match the search query
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[1];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+</script>
+
+{% endblock %}

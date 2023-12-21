@@ -1,0 +1,69 @@
+{% load static %}
+
+<!-- partial:partials/_sidebar.html -->
+<nav class="sidebar sidebar-offcanvas" id="sidebar">
+    <ul class="nav">
+        <li class="nav-item active">
+            <a class="nav-link " href="{% url 'seller_dashboard' %}">
+                <span class="menu-title">Dashboard</span>
+                <i class="mdi mdi-home menu-icon"></i>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'seller_profile' %}">
+                <span class="menu-title">Profile</span>
+                <i class="mdi mdi-contacts menu-icon"></i>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="collapse" href="#ui-basic" aria-expanded="false"
+                aria-controls="ui-basic">
+                <span class="menu-title">Products</span>
+                <i class="menu-arrow"></i>
+                <i class="mdi mdi-crosshairs-gps menu-icon"></i>
+            </a>
+            <div class="collapse" id="ui-basic">
+                <ul class="nav flex-column sub-menu">
+                    <li class="nav-item"> <a class="nav-link" href="{% url 'seller_items' %}">Your Items</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="{% url 'add_item' %}">Add Items</a>
+                    </li>
+                </ul>
+            </div>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'orders' %}">
+                <span class="menu-title">Orders</span>
+                <i class="mdi mdi-file-document menu-icon"></i>
+            </a>
+        </li>
+
+
+    </ul>
+</nav>
+
+<script>
+    var navItems = document.querySelectorAll('.nav-item');
+    var currentUrl = window.location.pathname;
+    var navLinks = document.querySelectorAll('.nav-item a');
+
+    navLinks.forEach(function (navLink) {
+        var href = navLink.getAttribute('href');
+        if (currentUrl == href) {
+            navLink.parentElement.classList.add('active');
+        } else {
+            navLink.parentElement.classList.remove('active');
+        }
+
+        // Check if the current URL is a child of the parent `li` element
+        var childLinks = navLink.parentElement.querySelectorAll('ul.nav a');
+        childLinks.forEach(function (childLink) {
+            var childHref = childLink.getAttribute('href');
+            if (currentUrl == childHref) {
+                navLink.parentElement.classList.add('active');
+            } else {
+                childLink.parentElement.classList.remove('active');
+            }
+        });
+    });
+</script>

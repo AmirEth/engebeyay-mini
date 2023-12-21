@@ -1,0 +1,195 @@
+{% extends 'delivery_person/includes/base.html' %}
+{% load static %}
+{% block content %}
+
+<!--Header-->
+<div>
+    <div class="alert  d-flex align-items-center" style="background-color: #ffc106;" role="alert">
+        <img src="{% static 'images/user.png' %}" style="width: 50px; height: 50px; border-radius: 50%;" class="avatar">
+        <h3 class=" ml-2" style="color: white;">{{user.user.username}} </h3>
+    </div>
+</div>
+<div class="m-2" id="summary" style="display: block;">
+    {% include 'includes/alerts.html' %}
+    <h5 class="">
+        Summary
+    </h5>
+    <div class="row earning-stats m-4">
+        <div class="col stat">
+            <h3 class="text-success">{{user.earnings}}</h3>
+            <p>Total Earnings</p>
+        </div>
+        <div class="col stat">
+            <h3 class="text-success">{{user.completed_jobs}}</h3>
+            <p>Completed Jobs</p>
+        </div>
+        <div class="col stat">
+            <h3 class="text-danger">{{user.driven}}</h3>
+            <p>Km Driven</p>
+        </div>
+    </div>
+    <hr>
+    <h5 class="">
+        Profile
+    </h5>
+    <div class="row m-4">
+        <div class="col-md-6">
+            <p class="card-description"><b> Name</b>: {{user.first_name}} {{user.last_name}} </p>
+        </div>
+        <div class="col-md-6">
+            <p class="card-description"><b> Email</b>: {{user.user.email}}</p>
+        </div>
+        <div class="col-md-6">
+            <p class="card-description"><b> Phone_number</b>: +251{{user.phone_number}} </p>
+        </div>
+    </div>
+    <br>
+    <a class="btn btn-warning btn-block" onclick="forsummary()"> <i class="fa fa-user"></i> <span class="text"
+            style="color: white;">
+            Update Profile</span> </a>
+    <a class="btn btn-info btn-block" onclick="forPassword()"> <i class="fa fa-key"></i> <span class="text"
+            style="color: white">
+            Change Passsword</span> </a>
+</div>
+<!--Update Profile-->
+<div id="update_profile" class="m-4" style="display: none;">
+    <form method="POST">
+        {% csrf_token %}
+        <header class="card-header ">
+            <strong class="d-inline-block mr-3">Update Profile</strong>
+        </header>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">First Name</label>
+                    <div class="col-sm-9">
+                        <input type="text" name="first_name" value="{{user.first_name}}" required
+                            class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">Last Name</label>
+                    <div class="col-sm-9">
+                        <input type="text" name="last_name" required value="{{user.last_name}}" class="form-control" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">Phone No.</label>
+                    <div class="col-sm-9">
+                        <input type="number" name="phone_number" required value="{{user.phone_number}}"
+                            class="form-control" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group row">
+
+                    <div class="col-sm-9">
+                        <div class="custom-control custom-switch">
+                            {% if user.status == "Active" %}
+                            <input type="checkbox" name="status" class="custom-control-input" checked id="phoneToggle">
+                            {% else %}
+                            <input type="checkbox" name="status" class="custom-control-input" id="phoneToggle">
+                            {%endif %}
+                            <label class="custom-control-label" for="phoneToggle">Status</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <a class="btn btn-info" onclick="forProfile()">Back</a>
+        <button type="submit" class="btn btn-warning">Save</button>
+    </form>
+</div>
+<!--Change Password-->
+<div id="update_password" class="m-4" style="display: none;">
+    <form class="form-sample" action="{% url 'delivery_guy_change_password' %}" method="post">
+        {% csrf_token %}
+        <header class="card-header ">
+            <strong class="d-inline-block mr-3">Update Password</strong>
+        </header>
+        <div class="col-md-6">
+            <div class="form-group row">
+                <label class="col-sm-5 col-form-label">New Password</label>
+                <div class="col-sm-7">
+                    <input type="password" name="password" id="id_password" class="form-control"
+                        onkeyup="checkPasswords()" />
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group row">
+                <label class="col-sm-5 col-form-label">Confirm Password.</label>
+                <div class="col-sm-7">
+                    <input type="password" name="confirm_password" id="id_confirm_password" class="form-control"
+                        onkeyup="checkPasswords()" />
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="form-group row">
+                <div class="col-sm-9 offset-sm-3">
+                    <small id="password-feedback"></small>
+                </div>
+            </div>
+        </div>
+        <a class="btn btn-info" onclick="forProfile()">Back</a>
+        <button type="submit" class="btn btn-warning">Save</button>
+    </form>
+</div>
+
+<!--Logout-->
+<div class="m-2"><a class="btn btn-danger btn-block" href="{% url 'logout' %}"> <i class="fa fa-power-off"></i> <span
+            class="text">Logout</span> </a></div>
+
+
+
+<!--Display Update Profile-->
+<script>
+    const summary = document.getElementById("summary");
+    const profile = document.getElementById("update_profile");
+    const password = document.getElementById("update_password");
+    function forsummary() {
+        summary.style.display = 'none';
+        password.style.display = 'none';
+        profile.style.display = 'block';
+    }
+    function forProfile() {
+        summary.style.display = 'block';
+        profile.style.display = 'none';
+        password.style.display = 'none';
+    }
+    function forPassword() {
+        password.style.display = 'block';
+        summary.style.display = 'none';
+        profile.style.display = 'none';
+    }
+</script>
+
+<!--To check if the passwords match-->
+<script>
+    function checkPasswords() {
+        var password = document.getElementById('id_password').value;
+        var confirmPassword = document.getElementById('id_confirm_password').value;
+        var feedback = document.getElementById('password-feedback');
+
+        if (password === confirmPassword) {
+            feedback.innerHTML = 'Passwords match.';
+            feedback.classList.remove('text-danger');
+            feedback.classList.add('text-success');
+        } else {
+            feedback.innerHTML = 'Passwords do not match.';
+            feedback.classList.remove('text-success');
+            feedback.classList.add('text-danger');
+        }
+    }
+</script>
+{% endblock %}

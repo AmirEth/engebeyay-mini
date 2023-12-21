@@ -1,0 +1,92 @@
+{% extends '../seller_base.html' %}
+{% load static %}
+{% block content %}
+
+<!-- partial:partials/_sidebar.html -->
+
+<!-- partial:partials/_sidebar.html -->
+{% include 'includes/seller_sideNav.html' %}
+<!-- partial -->
+<div class="main-panel">
+    <div class="content-wrapper">
+        <div class="col-12 grid-margin stretch-card">
+            <div class="col-lg-12 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Ordered Products Buy Buyers</h4>
+                        <div class="search-field d-none d-md-block ">
+                            <form class="d-flex align-items-center h-100" action="#">
+                                <div class="input-group">
+                                    <i class="input-group mdi mdi-magnify"></i>
+
+                                    <input onkeyup="myFunction()" id="myInput" type="text"
+                                        class="form-control bg-transparent border-0"
+                                        placeholder="Search for orders, by order-number">
+                                </div>
+                            </form>
+                        </div>
+                        <div class="container">
+                            <table class="table table-striped" id="myTable">
+                                <thead>
+                                    <tr>
+                                        <th><b> Order Number</b></th>
+                                        <th> <b>Product </b></th>
+                                        <th> <b>Buyer's Name </b></th>
+                                        <th> <b>Quantity </b></th>
+                                        <th> <b>Variations </b></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for ordered_item in ordered_items %}
+                                    <tr>
+                                        <td> {{ordered_item.order.order_number}}</td>
+                                        <td> {{ordered_item.product.product_name}}</td>
+                                        <td> {{ordered_item.user.buyer.first_name}}{{ordered_item.user.buyer.last_name}}
+                                        </td>
+                                        <td> {{ordered_item.quantity}} </td>
+                                        {% for item in ordered_item.variations.all %}
+                                        <td>{{ item.variation_category | capfirst }}:
+                                            {{ item.variation_value | capfirst }},</td>
+                                        {% empty %}
+                                        <td>No variations</td>
+                                        {% endfor %}
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- content-wrapper ends -->
+</div>
+<!-- main-panel ends -->
+<!-- page-body-wrapper ends -->
+<!--Table Search-->
+<!--Table Search-->
+<script>
+    function myFunction() {
+        // Declare variables
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+
+        // Loop through all table rows, and hide those who don't match the search query
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[0];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+</script>
+{% endblock %}

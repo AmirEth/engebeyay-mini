@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<header class="jumbotron jumbotron-fluid">
+    <div class="container text-center">
+        <h1 class="display-4">Sell Your Products with Us</h1>
+        <p class="lead">Join our e-commerce platform and reach millions of across all the nations.</p>
+        <a href="{% url 'seller_register'%}" class="btn btn-warning btn-lg">Sign Up as a Seller</a>
+    </div>
+</header>
+<section class="container">
+    <div class="row">
+        <div class="col-lg-4">
+            <h2>Why Choose Us?</h2>
+            <p>reason1</p>
+            <ul>
+                <li>reasons</li>
+                <li>reasons</li>
+                <li>reasons</li>
+                <li>reasons</li>
+            </ul>
+        </div>
+        <div class="col-lg-4">
+            <h2>Global Reach</h2>
+            <p>Reason2.</p>
+            <ul>
+                reasons?</li>
+                reasons?</li>
+                reasons?</li>
+                reasons?</li>
+            </ul>
+        </div>
+        <div class="col-lg-4">
+            <h2>Secure Transactions</h2>
+            <p>Reason3.</p>
+            <ul>
+                <li>reasons</li>
+                <li>reasons</li>
+                <li>reasons</li>
+                <li>reasons</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
