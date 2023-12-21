@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<header class="jumbotron jumbotron-fluid">
+    <div class="container text-center">
+        <h1 class="display-4">Join Us as a Delivery Provider</h1>
+        <p class="lead">Partner with our e-commerce platform and deliver products to customers across the globe.</p>
+        <a href="{% url 'delivery_register' %}" class="btn btn-warning btn-lg">Sign Up as a Delivery Provider</a>
+    </div>
+</header>
+
+<section class="container">
+    <div class="row">
+        <div class="col-lg-4">
+            <h2>Why Choose Us?</h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut tristique, mauris vitae lobortis malesuada,
+                metus mi consectetur magna, a tempus lectus lacus id nisl. Ut at urna auctor, volutpat nunc vel, finibus
+                mauris.</p>
+            <ul>
+                <li>Lorem ipsum dolor sit amet</li>
+                <li>Consectetur adipiscing elit</li>
+                <li>Ut tristique, mauris vitae lobortis malesuada</li>
+                <li>Metus mi consectetur magna</li>
+            </ul>
+        </div>
+        <div class="col-lg-4">
+            <h2>Flexible Schedule</h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut tristique, mauris vitae lobortis malesuada,
+                metus mi consectetur magna, a tempus lectus lacus id nisl. Ut at urna auctor, volutpat nunc vel, finibus
+                mauris.</p>
+            <ul>
+                <li>Lorem ipsum dolor sit amet</li>
+                <li>Consectetur adipiscing elit</li>
+                <li>Ut tristique, mauris vitae lobortis malesuada</li>
+                <li>Metus mi consectetur magna</li>
+            </ul>
+        </div>
+        <div class="col-lg-4">
+            <h2>Wide Customer Base</h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut tristique, mauris vitae lobortis malesuada,
+                metus mi consectetur magna, a tempus lectus lacus id nisl. Ut at urna auctor, volutpat nunc vel, finibus
+                mauris.</p>
+            <ul>
+                <li>Lorem ipsum dolor sit amet</li>
+                <li>Consectetur adipiscing elit</li>
+                <li>Ut tristique, mauris vitae lobortis malesuada</li>
+                <li>Metus mi consectetur magna</li>
+            </ul>
+        </div>
+    </div>
+</section>
+{% endblock %}

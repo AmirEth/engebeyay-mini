@@ -1,0 +1,89 @@
+{% extends 'delivery_person/includes/base.html' %}
+{% load static %}
+{% block content %}
+<!-- partial:partials/nav.html -->
+<header class="section-header ">
+    <section class=" header-main border-bottom">
+
+        <div class="container" style="margin-bottom: -10px;">
+            <nav class="navbar ">
+                <!-- Left Side -->
+                <ul class="nav">
+                    <div>
+                        <a style="width: 100px;" href="#"><img style="width: 20px;"
+                                src="{% static './images/logo-mini.svg' %}" alt="logo" /></a>
+                        <span class="title text-muted ml-2">Welcome: <b>{{user.username}}</b></span>
+                    </div>
+                </ul>
+                <!--Right side-->
+                <ul class="nav justify-content-end ">
+                    <!-- -->
+                    <div class="widget-header">
+                        <p class="title text-muted">Status: <i class="fa fa-check-circle-o" aria-hidden="true"
+                                style="color: green;"> {{status}}</i></p>
+                    </div>
+                </ul> <!-- widgets-wrap.// -->
+            </nav> <!-- row.// -->
+        </div> <!-- container.// -->
+
+    </section> <!-- header-main .// -->
+</header> <!-- section-header.// -->
+
+<!-- partial -->
+<div class="container mt-3">
+    <div class="col-md-9" id="order">
+        <article class="card">
+            <header class="card-header ">
+                <strong class="d-inline-block mr-3">List of Assigned Orders</strong>
+            </header>
+            <form action="{% url 'assiged_delivery'%}" method="post">
+                {% csrf_token %}
+                {% if not deliverys %}
+                <div class="mt-2 mb-5">
+                    <h6 class="text-center">No Deliveries Enjoy!</h6>
+                    <br>
+
+                </div>
+                {% else%}
+                {% for delivery in deliverys %}
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6>
+                                Order Number: {{delivery.order.order_number}}
+                                <input type="hidden" value="{{delivery.order.order_number}}" name="order">
+                            </h6>
+                            <span><b> Reciver:</b> {{delivery.reciver.first_name}}
+                                {{delivery.reciver.last_name}}</span>
+                        </div>
+                        <br>
+                        <div class="col-md-6">
+                            <i class="fa fa-map-marker text-muted" aria-hidden="true">
+                                buyer's Location: {{location}}
+                            </i><br>
+                            <i class="fa fa-phone text-muted" aria-hidden="true"> buyer's
+                                phone_number:{{delivery.order.phone}} </i>
+                        </div>
+                    </div>
+                    {% if exist == True %}
+                    <input class="btn btn-warning btn-block mt-2" value="Accept" onclick="showAlert()">
+                    {%else%}
+                    <input type="submit" class="btn btn-warning btn-block mt-2" value="Accept">
+                    {%endif%}
+                </div>
+                <hr>
+                {% endfor %}
+                {%endif%}
+            </form>
+
+        </article>
+
+    </div>
+</div>
+
+<script>
+    function showAlert() {
+        alert("Delivery is already in progress");
+    }
+</script>
+{% endblock %}

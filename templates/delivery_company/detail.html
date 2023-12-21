@@ -1,0 +1,164 @@
+{% extends '../delivery_base.html' %}
+{% load static %}
+{% block content %}
+
+<!-- partial:partials/_sidebar.html -->
+{% include 'delivery_company/includes/side_nav.html' %}
+<!-- partial -->
+<div class="main-panel">
+    <div class="content-wrapper">
+        <div class="col-12">
+            <div class="card">
+                {% include 'includes/admin_alert.html' %}
+                <div class="card-body">
+                    <h4 class="card-title">The Company</h4><br>
+                    <form id="delivery-details-form" class="form-sample" method="post">
+                        {%csrf_token %}
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p class="card-description">Name: {{delivery_comp.company_name}}</p>
+                                <p class="card-description">Date Joined: {{delivery_comp.user.date_joined}}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <p class="card-description">Email: {{delivery_comp.user.email}} </p>
+                            </div>
+                        </div> <br>
+                        <h6 class="card">Update Details</h6><br>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">Buissness Name</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" name="buissness_name" value="{{delivery_comp.company_name}}"
+                                            class="form-control" />
+                                    </div>
+                                </div>
+                                <input type="hidden" value="{{delivery_comp.location}}" id="delivery-location"
+                                    name="location">
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">Phone No.</label>
+                                    <div class="col-sm-9">
+                                        <input type="number" name="phone_number" value="0{{delivery_comp.phone_number}}"
+                                            class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">Location:</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" required class="form-control"
+                                            value="{{delivery_comp.location}}" id="search_input"
+                                            placeholder="Type address..." />
+
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">DeliveryFee</label>
+                                    <div class="col-sm-5">
+                                        <input type="text" name="delivery_fee" required class="form-control"
+                                            value="{{delivery_comp.delivery_fee}}" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-success btn-sm me-2">Save</button>
+                        <button class="btn btn-light btn-sm">Cancel</button>
+                        <hr><br>
+                    </form>
+                    <form class="form-sample" action="{% url 'delivery_comp_change_password' %}" method="post">
+                        {% csrf_token %}
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label class="col-sm-5 col-form-label">New Password</label>
+                                <div class="col-sm-7">
+                                    <input type="password" name="password" id="id_password" class="form-control"
+                                        onkeyup="checkPasswords()" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label class="col-sm-5 col-form-label">Confirm Password.</label>
+                                <div class="col-sm-7">
+                                    <input type="password" name="confirm_password" id="id_confirm_password"
+                                        class="form-control" onkeyup="checkPasswords()" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="form-group row">
+                                <div class="col-sm-9 offset-sm-3">
+                                    <small id="password-feedback"></small>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-success btn-sm me-2">Change</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- content-wrapper ends -->
+</div>
+<!-- main-panel ends -->
+<!-- page-body-wrapper ends -->
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&key={{ map_api_key }}">
+</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script>
+    var searchInput = 'search_input';
+
+    $(document).ready(function () {
+        var autocomplete;
+        autocomplete = new google.maps.places.Autocomplete((document.getElementById(searchInput)), {
+            types: ['geocode'],
+            componentRestrictions: {
+                country: "ET"
+            }
+        });
+
+        google.maps.event.addListener(autocomplete, 'place_changed', function (event) {
+            var place = autocomplete.getPlace();
+            var location = place.name;
+
+            // Set the value of the hidden input field to the selected place name
+            document.getElementById("delivery-location").value = location;
+        });
+    });
+
+    // Form submission
+    $('#delivery-details-form').submit(function (event) {
+        // Get the selected place name from the hidden input field
+        var location = document.getElementById("delivery-location").value;
+
+        // Set the value of the 'location' field in the form to the selected place name
+        document.getElementById("id_location").value = location;
+    });
+</script>
+<script>
+    function checkPasswords() {
+        var password = document.getElementById('id_password').value;
+        var confirmPassword = document.getElementById('id_confirm_password').value;
+        var feedback = document.getElementById('password-feedback');
+
+        if (password === confirmPassword) {
+            feedback.innerHTML = 'Passwords match.';
+            feedback.classList.remove('text-danger');
+            feedback.classList.add('text-success');
+        } else {
+            feedback.innerHTML = 'Passwords do not match.';
+            feedback.classList.remove('text-success');
+            feedback.classList.add('text-danger');
+        }
+    }
+</script>
+
+{% endblock %}

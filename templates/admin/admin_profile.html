@@ -1,0 +1,173 @@
+{% extends '../admin_base.html' %}
+{% load static %}
+{% block content %}
+
+<!-- partial:partials/_sidebar.html -->
+
+<!-- partial:partials/_sidebar.html -->
+{% include 'includes/admin_sideNav.html' %}
+<!-- partial -->
+<div class="main-panel">
+    <div class="content-wrapper">
+        <div class="col-12">
+            <div class="card">
+                {% include 'includes/admin_alert.html' %}
+                <div class="card-body">
+                    <h4 class="card-title">Your Profile</h4>
+                    <form class="form-sample" method="post">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p class="card-description">Name: {{staff.first_name}} {{staff.last_name}}</p>
+                                <p class="card-description">Date Joined: {{staff.user.date_joined}}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <p class="card-description">Email: {{staff}} </p>
+                            </div>
+                        </div> <br>
+                        <div class="row">
+                            <br>
+                            <p class="card-title"> Update Profile </p>
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">First Name</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" name="first_name" value="{{staff.first_name}}"
+                                            class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">Last Name</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" name="last_name" value="{{staff.last_name}}"
+                                            class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">Phone No.</label>
+                                    <div class="col-sm-9">
+                                        <input type="number" name="phone_number" value="0{{staff.phone_number}}"
+                                            class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+                            <!----->
+                        </div>
+                        <div class="row">
+
+                            <div class="col-md-6">
+                                {% if user.is_superadmin == True %}
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">Status</label>
+                                    <div class="col-sm-4">
+                                        <div class="form-check">
+                                            <label class="form-check-label">
+                                                <input type="radio" class="form-check-input" name="membershipRadios"
+                                                    id="membershipRadios1" value="" disabled checked> Admin </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-5">
+                                        <div class="form-check">
+                                            <label class="form-check-label">
+                                                <input type="radio" class="form-check-input" disabled
+                                                    name="membershipRadios" id="membershipRadios2" value="option2">
+                                                Staff </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% else %}
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">Status</label>
+                                    <div class="col-sm-4">
+                                        <div class="form-check">
+                                            <label class="form-check-label">
+                                                <input type="radio" class="form-check-input" name="membershipRadios"
+                                                    id="membershipRadios1" value="" disabled> Admin </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-5">
+                                        <div class="form-check">
+                                            <label class="form-check-label">
+                                                <input type="radio" class="form-check-input" disabled checked
+                                                    name="membershipRadios" id="membershipRadios2" value="option2">
+                                                Staff </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endif %}
+
+
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-success btn-sm me-2">Save</button>
+                        <button class="btn btn-light btn-sm">Cancel</button>
+                    </form>
+                    <form class="form-sample" action=" {% url 'change_password'%}" method="post">
+                        {% csrf_token %}
+                        <hr>
+                        <br>
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label class="col-sm-5 col-form-label">New Password</label>
+                                <div class="col-sm-7">
+                                    <input type="password" name="password" id="id_password" class="form-control"
+                                        onkeyup="checkPasswords()" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label class="col-sm-5 col-form-label">Confirm Password.</label>
+                                <div class="col-sm-7">
+                                    <input type="password" name="confirm_password" id="id_confirm_password"
+                                        class="form-control" onkeyup="checkPasswords()" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="form-group row">
+                                <div class="col-sm-9 offset-sm-3">
+                                    <small id="password-feedback"></small>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-danger btn-sm me-2">Update</button>
+                        <button class="btn btn-light btn-sm">Cancel</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- content-wrapper ends -->
+</div>
+<!-- main-panel ends -->
+<!-- page-body-wrapper ends -->
+<script>
+    function checkPasswords() {
+        var password = document.getElementById('id_password').value;
+        var confirmPassword = document.getElementById('id_confirm_password').value;
+        var feedback = document.getElementById('password-feedback');
+
+        if (password === confirmPassword) {
+            feedback.innerHTML = 'Passwords match.';
+            feedback.classList.remove('text-danger');
+            feedback.classList.add('text-success');
+        } else {
+            feedback.innerHTML = 'Passwords do not match.';
+            feedback.classList.remove('text-success');
+            feedback.classList.add('text-danger');
+        }
+    }
+</script>
+</body>
+
+
+</html>
+{% endblock %}

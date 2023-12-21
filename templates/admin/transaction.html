@@ -1,0 +1,109 @@
+{% extends '../admin_base.html' %}
+{% load static %}
+{% block content %}
+
+<!-- partial:partials/_sidebar.html -->
+
+<!-- partial:partials/_sidebar.html -->
+{% include 'includes/admin_sideNav.html' %}
+<!-- partial -->
+<div class="main-panel">
+    <div class="content-wrapper">
+        <div class="col-12 grid-margin stretch-card">
+            <div class="col-lg-12 grid-margin stretch-card">
+                <div class="card">
+                    {% include 'includes/admin_alert.html' %}
+                    <div class="card-body">
+                        <h4 class="card-title">Transaction</h4>
+                        <div class="search-field d-none d-md-block ">
+                            <div class="" style="display: flex; align-items: center; justify-content: flex-end;">
+                                <i class=" mdi mdi-magnify"></i>
+                                <input id="myInput" onkeyup="myFunction()" type="text"
+                                    class="form-control bg-transparent border-0" placeholder="Search ">
+                            </div>
+                        </div>
+                        <div class="container">
+                            <table id="myTable" class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th><b> Order</b></th>
+                                        <th><b>Seller, Email</b></th>
+                                        <th><b>Total Order Amount</b></th>
+
+                                        <th><b>Action</b></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <form id="payment" action="https://test.yenepay.com/" method="POST">
+                                        {% csrf_token %}
+                                        {% for ordered_item in ordered_items %}
+                                        <tr>
+                                            <td>{{ ordered_item.order__order_number }}</td>
+                                            <td>{{ ordered_item.product__owner__user__email }}</td>
+                                            <td>{{ ordered_item.total_order_amount }}</td>
+
+                                            <!--Finish Payment For the Seller After Confirmation-->
+                                            <input type="hidden" name="Process" value="Express">
+                                            <input type="hidden" name="MerchantOrderId"
+                                                value="{{ordered_item.order__order_number}}Q{{ordered_item.product__owner__user__email}}">
+                                            <input type="hidden" name="MerchantId"
+                                                value="{{ordered_item.product__owner__merchant_id}}">
+                                            <input type="hidden" name="IPNUrl" value="">
+                                            <input type="hidden" name="SuccessUrl"
+                                                value="http://{{ordered_item.order__ip}}:8000/administrator/admin_pay_sellers/">
+                                            <input type="hidden" name="CancelUrl"
+                                                value="http://{{ordered_item.order__ip}}:8000/administrator/error/">
+                                            <input type="hidden" name="ItemId"
+                                                value="{{ ordered_item.product__owner__user__email }}">
+                                            <input type="hidden" name="ItemName"
+                                                value="{{ ordered_item.product__owner__user__email }}">
+                                            <input type="hidden" name="UnitPrice"
+                                                value="{{ ordered_item.total_order_amount }}">
+                                            <input type="hidden" name="Quantity" value="1">
+                                            <td>
+                                                <button class="btn btn-warning"
+                                                    onclick="return confirm('Pay {{ordered_item.product__owner__user__email}}  {{ordered_item.total_order_amount}}?')"
+                                                    type="submit">Pay</button>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </form>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- content-wrapper ends -->
+</div>
+<!-- main-panel ends -->
+<!-- page-body-wrapper ends -->
+<!--Table Search-->
+<script>
+    function myFunction() {
+        // Declare variables
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+
+        // Loop through all table rows, and hide those who don't match the search query
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[1];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+</script>
+
+{% endblock %}
