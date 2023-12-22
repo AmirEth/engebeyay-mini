@@ -3,7 +3,7 @@ from .models import Product, ReviewRating, Variation
 from category.models import Category
 from carts.models import CartItem, Favorite
 from django.db.models import Q
-
+from django.contrib.auth.models import User
 from carts.views import _cart_id
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.http import HttpResponse
@@ -22,14 +22,16 @@ def store(request, category_slug=None):
         categories = get_object_or_404(Category, slug=category_slug)
         products = Product.objects.filter(
             category=categories, is_available=True)
-        fov_products = Favorite.objects.all().filter(user=current_user)
+        if current_user.is_authenticated:
+            fov_products = Favorite.objects.all().filter(user=current_user)
         paginator = Paginator(products, 3)
         page = request.GET.get('page')
         paged_products = paginator.get_page(page)
         product_count = products.count()
     else:
         products = Product.objects.all().filter(is_available=True).order_by('id')
-        fov_products = Favorite.objects.all().filter(user=current_user)
+        if current_user.is_authenticated:
+            fov_products = Favorite.objects.all().filter(user=current_user)
         paginator = Paginator(products, 3)
         page = request.GET.get('page')
         paged_products = paginator.get_page(page)
