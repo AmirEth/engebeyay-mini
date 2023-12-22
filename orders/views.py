@@ -110,6 +110,7 @@ def order_complete(request):
 
         x = requests.post(url, datax)
         if x.status_code == 200:
+            print(f"YenePay API Response: Status Code {x.status_code}, Content: {x.text}")
             data = Payment(user=current_user, payment_id=ti,
                            payment_method="Yenepay", status=status, amount_paid=total)
 
