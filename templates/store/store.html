@@ -113,8 +113,6 @@
 								<div class="card-footer d-flex align-items-end pt-3 px-0 pb-0 mt-auto">
 									<a href="{{ product.get_url }}" class="btn btn-warning shadow-0 me-1">view
 										Detail</a>
-									{% if user.is_buyer == True %}
-
 									{% if fov_products %}
 									{% for fov_product in fov_products %}
 									{% if fov_product.product == product %}
@@ -135,8 +133,7 @@
 												class="fas fa-heart fa-lg text-light px-1"></i>
 										</button>
 									</form>
-									{% endif %}
-									{% else %}
+
 									{% endif %}
 								</div>
 							</div>
