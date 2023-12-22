@@ -17,6 +17,7 @@ from buyer.decorator import buyer_required
 def store(request, category_slug=None):
     categories = None
     products = None
+    fov_products = []  
     current_user = request.user
     if category_slug != None:
         categories = get_object_or_404(Category, slug=category_slug)
