@@ -93,7 +93,7 @@ def place_order(request, total=0, quantity=0,):
 
 @buyer_required
 def order_complete(request):
-    #try:
+    try:
         current_user = request.user
         ii = request.GET.get('itemName')
         total = request.GET.get('TotalAmount')
@@ -110,7 +110,6 @@ def order_complete(request):
 
         x = requests.post(url, datax)
         if x.status_code == 200:
-            print(f"YenePay API Response: Status Code {x.status_code}, Content: {x.text}")
             data = Payment(user=current_user, payment_id=ti,
                            payment_method="Yenepay", status=status, amount_paid=total)
 
@@ -229,13 +228,13 @@ def order_complete(request):
         else:
             print('Invalid payment process')
             return render(request, 'orders/order_cancelled.html')
-  #  except ConnectionError:
+    except ConnectionError:
         # Handle the connection error gracefully
-   #     return render(request, 'orders/connection_error.html')
+        return render(request, 'orders/connection_error.html')
 
-    #except RequestException:
+    except RequestException:
         # Handle other request-related exceptions
-     #   return render(request, 'orders/connection_error.html')
+        return render(request, 'orders/connection_error.html')
 
 
 @buyer_required
