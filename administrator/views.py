@@ -221,7 +221,7 @@ def admin_transaction(request):
 
 @staff_required
 def unverified_users(request):
-    users = Account.objects.filter(is_verified=False)
+    users = Account.objects.filter(is_verified=False,is_seller=True)
 
     context = {'users': users}
     return render(request, 'admin/unverified_users.html', context)
