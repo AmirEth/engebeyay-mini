@@ -107,8 +107,12 @@ def order_complete(request):
             "transactionId": ti,
             "merchantOrderId": moi
         }
-
-        x = requests.post(url, datax)
+        # Bypass the proxy for this specific request
+        proxies = {
+            'http': None,   # Set to None to bypass the proxy for HTTP requests
+            'https': None   # Set to None to bypass the proxy for HTTPS requests
+        }
+        x = requests.post(url, datax, proxies=proxies)
         if x.status_code == 200:
             data = Payment(user=current_user, payment_id=ti,
                            payment_method="Yenepay", status=status, amount_paid=total)
