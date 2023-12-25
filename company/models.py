@@ -23,6 +23,7 @@ class Payment_Method(models.Model):
     currency = models.CharField(max_length=100)
     merchant_id = models.CharField(max_length=100)
     included_date = models.DateField(null=True, auto_now_add=True)
+    reverse_url= models.CharField(max_length=250,null=True)
 
     def __str__(self):
         return self.payment_method

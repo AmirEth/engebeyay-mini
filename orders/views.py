@@ -77,12 +77,14 @@ def place_order(request, total=0, quantity=0,):
                 user=current_user, status="New")
             company_payment = Payment_Method.objects.get(
                 payment_method="YenePay")
+            url= company_payment.reverse_url
             merchant_id = company_payment.merchant_id
             context = {
                 'order': order,
                 'cart_items': cart_items,
                 'total': total,
                 'tax': tax,
+                'url': url,
                 'grand_total': grand_total,
                 'merchant_id': merchant_id
             }
